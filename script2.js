@@ -130,6 +130,7 @@
 
     var mMatrix = mat4.create();
     var vMatrix = mat4.create();
+    var mvMatrix = mat4.create();
 
     //var mvMatrix = mat4.create();
     //var mvMatrixStack = [];
@@ -142,8 +143,9 @@
 
 
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
+        
+        //mvMatrix=vMatrix*mMatrix;
         //gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
-
         gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
         gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
 
@@ -220,16 +222,13 @@
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
 
         mat4.identity(vMatrix);
-        mat4.translate(vMatrix, [0, 0, -40]);
-        mat4.rotate(vMatrix,Math.PI/2, [0, 0, 0]);
+        mat4.translate(vMatrix, [0, 0, -50]);
+        mat4.rotate(vMatrix,Math.PI/2, [1, 0, 0]);
 
-
-
-        mat4.identity(mMatrix);
-        
         //console.log("xPos1 is   " + xPos1); 
-        
+        mat4.identity(mMatrix);
         mat4.translate(mMatrix, [xPos1, yPos1, 0]);
+
         
 
         gl.activeTexture(gl.TEXTURE0);
@@ -258,6 +257,7 @@
         /*==============SETTING TEXTURES AND DRAW SPHERE 2==============*/
         mat4.identity(mMatrix);
         mat4.translate(mMatrix, [xPos2, yPos2, 0]);
+
         
         texture = "galvanized";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -289,6 +289,7 @@
         
         mat4.identity(mMatrix);
         mat4.translate(mMatrix, [xPosCy1, yPosCy1, 0]);
+        mat4.rotate(mMatrix,Math.PI/4, [0, 0, 1]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -321,6 +322,7 @@
         
         mat4.identity(mMatrix);
         mat4.translate(mMatrix, [xPosCy2, yPosCy2, 0]);
+        mat4.rotate(mMatrix,3*Math.PI/4, [0, 0, 1]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -353,6 +355,7 @@
         
         mat4.identity(mMatrix);
         mat4.translate(mMatrix, [xPosCy3, yPosCy3, 0]);
+        mat4.rotate(mMatrix,-Math.PI/4, [0, 0, 1]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -381,10 +384,13 @@
         gl.drawElements(gl.TRIANGLES, pillarVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 
 
-        /*==============SETTING TEXTURES AND DRAW PILLAR 1==============*/
+        /*==============SETTING TEXTURES AND DRAW PILLAR 4==============*/
         
         mat4.identity(mMatrix);
+        mat4.translate(mMatrix, [0, 0, 0]);
         mat4.translate(mMatrix, [xPosCy4, yPosCy4, 0]);
+        mat4.rotate(mMatrix,Math.PI/4, [0, 0, 1]);
+
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -409,8 +415,41 @@
         gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, pillarVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, pillarVertexIndexBuffer);
+
         setMatrixUniforms();
         gl.drawElements(gl.TRIANGLES, pillarVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+
+        /*==============SETTING TEXTURES AND DRAW Map==============*/
+        
+        mat4.identity(mMatrix);
+
+        texture = "none";
+        gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
+
+        gl.activeTexture(gl.TEXTURE0);
+        if (texture == "earth") {
+            gl.bindTexture(gl.TEXTURE_2D, earthTexture);
+        } else if (texture == "galvanized") {
+            gl.bindTexture(gl.TEXTURE_2D, galvanizedTexture);
+        }
+        gl.uniform1i(shaderProgram.samplerUniform, 0);
+
+        gl.uniform1f(shaderProgram.materialShininessUniform, parseFloat(shininess));
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, mapVertexPositionBuffer);
+        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, mapVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, mapVertexTextureCoordBuffer);
+        gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, mapVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+        
+        gl.bindBuffer(gl.ARRAY_BUFFER, mapVertexNormalBuffer);
+        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, mapVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mapVertexIndexBuffer);
+
+        setMatrixUniforms();
+        gl.drawElements(gl.TRIANGLES, mapVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+
 
 
 
@@ -431,6 +470,8 @@
         }
 
         time_old=time_now;*/
+
+
     }
 
 
@@ -577,7 +618,6 @@
         animate();
         drawScene();
 
-        
     }
 
 
@@ -595,6 +635,7 @@
         initTextures();
         loadSpheres();
         loadPillars();
+        loadMap();
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);

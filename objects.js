@@ -13,7 +13,7 @@
   var frictionPlane=0.4, frictionIce=0.0;
   var frictionKoeff1=frictionPlane,frictionKoeff2=frictionPlane, friction1, friction2;
 
-  var planWidth = 40, planHeight = 30;
+  var planWidth = 60, planHeight = 30;
   var xPosCy1=20, yPosCy1=15, xPosCy2=20,yPosCy2=-15, xPosCy3=-20, yPosCy3=15, xPosCy4=-20, yPosCy4=-15;
   var xTemp, yTemp, CylinderCollision1 = false, CylinderCollision2 = false;
 
@@ -81,6 +81,38 @@
         pillarVertexIndexBuffer.numItems = pillarData.indices.length;
     }
 
+    var mapVertexPositionBuffer;
+    var mapVertexNormalBuffer;
+    var mapVertexTextureCoordBuffer;
+    var mapVertexIndexBuffer;
+
+    function handleLoadedMap(mapData) {
+        
+        mapVertexNormalBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, mapVertexNormalBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mapData.normals), gl.STATIC_DRAW);
+        mapVertexNormalBuffer.itemSize = 3;
+        mapVertexNormalBuffer.numItems = mapData.normals.length / 3;
+
+        mapVertexTextureCoordBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, mapVertexTextureCoordBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mapData.texcoords), gl.STATIC_DRAW);
+        mapVertexTextureCoordBuffer.itemSize = 2;
+        mapVertexTextureCoordBuffer.numItems = mapData.texcoords.length / 2;
+
+        mapVertexPositionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, mapVertexPositionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mapData.verts), gl.STATIC_DRAW);
+        mapVertexPositionBuffer.itemSize = 3;
+        mapVertexPositionBuffer.numItems = mapData.verts.length / 3;
+
+        mapVertexIndexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mapVertexIndexBuffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mapData.indices), gl.STATIC_DRAW);
+        mapVertexIndexBuffer.itemSize = 1;
+        mapVertexIndexBuffer.numItems = mapData.indices.length;
+    }    
+
 
 function loadSpheres() {
         var request = new XMLHttpRequest();
@@ -95,10 +127,21 @@ function loadSpheres() {
 
     function loadPillars() {
         var request = new XMLHttpRequest();
-        request.open("GET", "newPillar.json");
+        request.open("GET", "pillarfirst.json");
         request.onreadystatechange = function () {
             if (request.readyState == 4) {
                 handleLoadedPillar(JSON.parse(request.responseText));
+            }
+        }
+        request.send();
+    }    
+
+    function loadMap(){
+        var request = new XMLHttpRequest();
+        request.open("GET", "map.json");
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                handleLoadedMap(JSON.parse(request.responseText));
             }
         }
         request.send();

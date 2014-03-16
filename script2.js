@@ -149,10 +149,15 @@
         gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
         gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
 
-
+        var normalMatrix = mat3.create();    
+        mat3.fromMat4(normalMatrix,vMatrix); 
+        mat3.invert(normalMatrix,normalMatrix);
+        mat3.transpose(normalMatrix,normalMatrix);
+/*
         var normalMatrix = mat3.create();
         mat4.toInverseMat3(vMatrix, normalMatrix);
         mat3.transpose(normalMatrix);
+        */
         gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
     }
 
@@ -179,7 +184,7 @@
             return;
         }
 
-        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+        mat4.perspective(pMatrix,45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
 
         var specularHighlights = useSpecularLighting;
         gl.uniform1i(shaderProgram.showSpecularHighlightsUniform, specularHighlights);
@@ -222,12 +227,12 @@
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
 
         mat4.identity(vMatrix);
-        mat4.translate(vMatrix, [0, 0, -50]);
-        mat4.rotate(vMatrix,Math.PI/2, [1, 0, 0]);
+        mat4.translate(vMatrix,vMatrix, [0, 0, -50]);
+        mat4.rotate(vMatrix, vMatrix,Math.PI/2, [1, 0, 0]);
 
         //console.log("xPos1 is   " + xPos1); 
         mat4.identity(mMatrix);
-        mat4.translate(mMatrix, [xPos1, yPos1, 0]);
+        mat4.translate(mMatrix,mMatrix, [xPos1, yPos1, 0]);
 
         
 
@@ -256,7 +261,7 @@
 
         /*==============SETTING TEXTURES AND DRAW SPHERE 2==============*/
         mat4.identity(mMatrix);
-        mat4.translate(mMatrix, [xPos2, yPos2, 0]);
+        mat4.translate(mMatrix,mMatrix, [xPos2, yPos2, 0]);
 
         
         texture = "galvanized";
@@ -288,8 +293,8 @@
         /*==============SETTING TEXTURES AND DRAW PILLAR 1==============*/
         
         mat4.identity(mMatrix);
-        mat4.translate(mMatrix, [xPosCy1, yPosCy1, 0]);
-        mat4.rotate(mMatrix,Math.PI/4, [0, 0, 1]);
+        mat4.translate(mMatrix,mMatrix, [xPosCy1, yPosCy1, 0]);
+        mat4.rotate(mMatrix,mMatrix,Math.PI/4, [0, 0, 1]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -321,8 +326,8 @@
         /*==============SETTING TEXTURES AND DRAW PILLAR 2==============*/
         
         mat4.identity(mMatrix);
-        mat4.translate(mMatrix, [xPosCy2, yPosCy2, 0]);
-        mat4.rotate(mMatrix,3*Math.PI/4, [0, 0, 1]);
+        mat4.translate(mMatrix, mMatrix, [xPosCy2, yPosCy2, 0]);
+        mat4.rotate(mMatrix, mMatrix,3*Math.PI/4, [0, 0, 1]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -354,8 +359,8 @@
         /*==============SETTING TEXTURES AND DRAW PILLAR 3==============*/
         
         mat4.identity(mMatrix);
-        mat4.translate(mMatrix, [xPosCy3, yPosCy3, 0]);
-        mat4.rotate(mMatrix,-Math.PI/4, [0, 0, 1]);
+        mat4.translate(mMatrix,mMatrix, [xPosCy3, yPosCy3, 0]);
+        mat4.rotate(mMatrix,mMatrix,-Math.PI/4, [0, 0, 1]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -387,9 +392,8 @@
         /*==============SETTING TEXTURES AND DRAW PILLAR 4==============*/
         
         mat4.identity(mMatrix);
-        mat4.translate(mMatrix, [0, 0, 0]);
-        mat4.translate(mMatrix, [xPosCy4, yPosCy4, 0]);
-        mat4.rotate(mMatrix,Math.PI/4, [0, 0, 1]);
+        mat4.translate(mMatrix, mMatrix, [xPosCy4, yPosCy4, 0]);
+        mat4.rotate(mMatrix,mMatrix,Math.PI/4, [0, 0, 1]);
 
         
         texture = "none";

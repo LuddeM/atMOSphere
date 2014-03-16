@@ -75,12 +75,12 @@
 
     uniform mat4 uMVMatrix;
 
-    uniform mat4 uMMatrix;
-    uniform mat4 uVMatrix;
+    //uniform mat4 uMMatrix;
+    //uniform mat4 uVMatrix;
 
     uniform mat4 uPMatrix;
     uniform mat3 uNMatrix;
-    uniform mat4 vMatrix;
+    //uniform mat4 vMatrix;
 
     varying vec2 vTextureCoord;
     varying vec3 vTransformedNormal;
@@ -89,9 +89,9 @@
 
     void main(void) {
         
-        //vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);  
-        vPosition = uVMatrix * vec4(aVertexPosition, 1.0);  
-        gl_Position = uPMatrix * uMMatrix* vPosition;
+        vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);  
+        //vPosition = uVMatrix * vec4(aVertexPosition, 1.0);  
+        gl_Position = uPMatrix * vPosition;
 
         //vPosition = uMMatrix * uVMatrix * vec4(aVertexPosition, 1.0);  
         //gl_Position = uPMatrix * vPosition;

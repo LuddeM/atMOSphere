@@ -4,7 +4,7 @@ var useSpecularLighting = true;
 var useLighting = true;
 
 //Light Positioning
-var lightPositionX =-10.0,lightPositionY = 4.0, lightPositionZ = -20.0;
+var lightPositionX =-10.0,lightPositionY = 100.0, lightPositionZ = -50.0;
 //Specular lighting
 var specularR = 0.8, specularG = 0.8, specularB = 0.8;
 //Diffuse lighting

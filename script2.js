@@ -78,12 +78,12 @@
         gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 
 
-        shaderProgram.vMatrixUniform =	gl.getUniformLocation(shaderProgram, "uVMatrix");
-        shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
+        //shaderProgram.vMatrixUniform =	gl.getUniformLocation(shaderProgram, "uVMatrix");
+        //shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
 
         
         shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-        //shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+        shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
         shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
         shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
         shaderProgram.materialShininessUniform = gl.getUniformLocation(shaderProgram, "uMaterialShininess");
@@ -130,7 +130,7 @@
 
     var mMatrix = mat4.create();
     var vMatrix = mat4.create();
-    var mvMatrix = mat4.create();
+    //var mvMatrix = mat4.create();
 
     //var mvMatrix = mat4.create();
     //var mvMatrixStack = [];
@@ -143,11 +143,11 @@
 
 
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        
-        //mvMatrix=vMatrix*mMatrix;
-        //gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
-        gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
-        gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
+        mvMatrix=mat4.create();
+        mvMatrix=mat4.multiply(mvMatrix,vMatrix,mMatrix);
+        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+        //gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
+        //gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
 
         var normalMatrix = mat3.create();    
         mat3.fromMat4(normalMatrix,vMatrix); 
@@ -227,13 +227,15 @@
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
 
         mat4.identity(vMatrix);
-        mat4.translate(vMatrix,vMatrix, [0, 0, -50]);
-        mat4.rotate(vMatrix, vMatrix,Math.PI/2, [1, 0, 0]);
+        mat4.rotate(vMatrix, vMatrix,-Math.PI/4, [1, 0, 0]);
+        mat4.translate(vMatrix,vMatrix, [0, 50, -50]);
+
+
 
         //console.log("xPos1 is   " + xPos1); 
         mat4.identity(mMatrix);
-        mat4.translate(mMatrix,mMatrix, [xPos1, yPos1, 0]);
-
+        mat4.translate(mMatrix,mMatrix, [xPos1, yPos1, 1]);
+        mat4.rotate(mMatrix,mMatrix,Math.PI/2, [1, 0, 0]);
         
 
         gl.activeTexture(gl.TEXTURE0);
@@ -261,7 +263,8 @@
 
         /*==============SETTING TEXTURES AND DRAW SPHERE 2==============*/
         mat4.identity(mMatrix);
-        mat4.translate(mMatrix,mMatrix, [xPos2, yPos2, 0]);
+        mat4.translate(mMatrix,mMatrix, [xPos2, yPos2, 1]);
+        mat4.rotate(mMatrix,mMatrix,Math.PI/2, [1, 0, 0]);
 
         
         texture = "galvanized";
@@ -294,7 +297,7 @@
         
         mat4.identity(mMatrix);
         mat4.translate(mMatrix,mMatrix, [xPosCy1, yPosCy1, 0]);
-        mat4.rotate(mMatrix,mMatrix,Math.PI/4, [0, 0, 1]);
+        mat4.rotate(mMatrix,mMatrix,Math.PI/2, [1, 0, 0]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -327,7 +330,7 @@
         
         mat4.identity(mMatrix);
         mat4.translate(mMatrix, mMatrix, [xPosCy2, yPosCy2, 0]);
-        mat4.rotate(mMatrix, mMatrix,3*Math.PI/4, [0, 0, 1]);
+        mat4.rotate(mMatrix, mMatrix,Math.PI/2, [1, 0, 0]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -360,7 +363,7 @@
         
         mat4.identity(mMatrix);
         mat4.translate(mMatrix,mMatrix, [xPosCy3, yPosCy3, 0]);
-        mat4.rotate(mMatrix,mMatrix,-Math.PI/4, [0, 0, 1]);
+        mat4.rotate(mMatrix, mMatrix,Math.PI/2, [1, 0, 0]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -393,7 +396,7 @@
         
         mat4.identity(mMatrix);
         mat4.translate(mMatrix, mMatrix, [xPosCy4, yPosCy4, 0]);
-        mat4.rotate(mMatrix,mMatrix,Math.PI/4, [0, 0, 1]);
+        mat4.rotate(mMatrix,mMatrix,Math.PI/2, [1, 0, 0]);
 
         
         texture = "none";
@@ -426,6 +429,7 @@
         /*==============SETTING TEXTURES AND DRAW Map==============*/
         
         mat4.identity(mMatrix);
+        mat4.rotate(mMatrix, mMatrix,Math.PI/2, [1, 0, 0]);
 
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");

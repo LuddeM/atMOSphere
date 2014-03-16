@@ -78,11 +78,12 @@
         gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 
 
-        //shaderProgram.vMatrixUniform =	gl.getUniformLocation(shaderProgram, "uVMatrix");
-        //shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
+        shaderProgram.vMatrixUniform =	gl.getUniformLocation(shaderProgram, "uVMatrix");
+        shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
+
         
         shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-        shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+        //shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
         shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
         shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
         shaderProgram.materialShininessUniform = gl.getUniformLocation(shaderProgram, "uMaterialShininess");
@@ -127,42 +128,28 @@
         galvanizedTexture.image.src = "arroway.de_metal+structure+06_d100_flat.jpg";
     }
 
-    //var mMatrix = mat4.create();
-    //var vMatrix = mat4.create();
+    var mMatrix = mat4.create();
+    var vMatrix = mat4.create();
 
-    var mvMatrix = mat4.create();
+    //var mvMatrix = mat4.create();
     //var mvMatrixStack = [];
     var pMatrix = mat4.create();
 
-    var vMatrix= mat4.create();
-    mat4.rotate(vMatrix,Math.PI/2, [0, 1, 0]);
+    
 
-/*
-    function mvPushMatrix() {
-        var copy = mat4.create();
-        mat4.set(mvMatrix, copy);
-        mvMatrixStack.push(copy);
-    }*/
-/*
-    function mvPopMatrix() {
-        if (mvMatrixStack.length == 0) {
-            throw "Invalid popMatrix!";
-        }
-        mvMatrix = mvMatrixStack.pop();
-    }*/
 
     function setMatrixUniforms() {
 
 
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+        //gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 
-        //gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
-        //gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
+        gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
+        gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
 
 
         var normalMatrix = mat3.create();
-        mat4.toInverseMat3(mvMatrix, normalMatrix);
+        mat4.toInverseMat3(vMatrix, normalMatrix);
         mat3.transpose(normalMatrix);
         gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
     }
@@ -232,11 +219,17 @@
         var texture = "earth";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
 
-        mat4.identity(mvMatrix);
+        mat4.identity(vMatrix);
+        mat4.translate(vMatrix, [0, 0, -40]);
+        mat4.rotate(vMatrix,Math.PI/2, [0, 0, 0]);
 
+
+
+        mat4.identity(mMatrix);
+        
         //console.log("xPos1 is   " + xPos1); 
-        mat4.translate(mvMatrix, [0, 0, -40]);
-        mat4.translate(mvMatrix, [xPos1, yPos1, 0]);
+        
+        mat4.translate(mMatrix, [xPos1, yPos1, 0]);
         
 
         gl.activeTexture(gl.TEXTURE0);
@@ -263,11 +256,8 @@
         gl.drawElements(gl.TRIANGLES, teapotVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 
         /*==============SETTING TEXTURES AND DRAW SPHERE 2==============*/
-        mat4.identity(mvMatrix);
-
-        //console.log("xPos1 is   " + xPos1); 
-        mat4.translate(mvMatrix, [0, 0, -40]);
-        mat4.translate(mvMatrix, [xPos2, yPos2, 0]);
+        mat4.identity(mMatrix);
+        mat4.translate(mMatrix, [xPos2, yPos2, 0]);
         
         texture = "galvanized";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -297,12 +287,8 @@
 
         /*==============SETTING TEXTURES AND DRAW PILLAR 1==============*/
         
-        mat4.identity(mvMatrix);
-
-        //console.log("xPos1 is   " + xPos1); 
-        mat4.translate(mvMatrix, [0, 0, -40]);
-
-        mat4.translate(mvMatrix, [xPosCy1, yPosCy1, 0]);
+        mat4.identity(mMatrix);
+        mat4.translate(mMatrix, [xPosCy1, yPosCy1, 0]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -333,12 +319,8 @@
 
         /*==============SETTING TEXTURES AND DRAW PILLAR 2==============*/
         
-        mat4.identity(mvMatrix);
-
-        //console.log("xPos1 is   " + xPos1); 
-        mat4.translate(mvMatrix, [0, 0, -40]);
-
-        mat4.translate(mvMatrix, [xPosCy2, yPosCy2, 0]);
+        mat4.identity(mMatrix);
+        mat4.translate(mMatrix, [xPosCy2, yPosCy2, 0]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -369,12 +351,8 @@
 
         /*==============SETTING TEXTURES AND DRAW PILLAR 3==============*/
         
-        mat4.identity(mvMatrix);
-
-        //console.log("xPos1 is   " + xPos1); 
-        mat4.translate(mvMatrix, [0, 0, -40]);
-
-        mat4.translate(mvMatrix, [xPosCy3, yPosCy3, 0]);
+        mat4.identity(mMatrix);
+        mat4.translate(mMatrix, [xPosCy3, yPosCy3, 0]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -405,12 +383,8 @@
 
         /*==============SETTING TEXTURES AND DRAW PILLAR 1==============*/
         
-        mat4.identity(mvMatrix);
-
-        //console.log("xPos1 is   " + xPos1); 
-        mat4.translate(mvMatrix, [0, 0, -40]);
-
-        mat4.translate(mvMatrix, [xPosCy4, yPosCy4, 0]);
+        mat4.identity(mMatrix);
+        mat4.translate(mMatrix, [xPosCy4, yPosCy4, 0]);
         
         texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");

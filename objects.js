@@ -95,7 +95,7 @@ function loadSpheres() {
 
     function loadPillars() {
         var request = new XMLHttpRequest();
-        request.open("GET", "pillar3.json");
+        request.open("GET", "newPillar.json");
         request.onreadystatechange = function () {
             if (request.readyState == 4) {
                 handleLoadedPillar(JSON.parse(request.responseText));

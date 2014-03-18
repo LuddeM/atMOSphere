@@ -76,24 +76,24 @@
 
         shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
         gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
-
-
-        //shaderProgram.vMatrixUniform =	gl.getUniformLocation(shaderProgram, "uVMatrix");
-        //shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
-
         
         shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
         shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
         shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+
         shaderProgram.materialShininessUniform = gl.getUniformLocation(shaderProgram, "uMaterialShininess");
         shaderProgram.showSpecularHighlightsUniform = gl.getUniformLocation(shaderProgram, "uShowSpecularHighlights");
         shaderProgram.useTexturesUniform = gl.getUniformLocation(shaderProgram, "uUseTextures");
         shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
+
         shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
         shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(shaderProgram, "uPointLightingLocation");
         shaderProgram.pointLightingSpecularColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingSpecularColor");
         shaderProgram.pointLightingDiffuseColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingDiffuseColor");
+
+        //A shaderthing for the cameraPosition, will have to be uniformed as in setMatrixUniforms
+        shaderProgram.cameraPositionUniform = gl.getUniformLocation(shaderProgram, "uCameraPosition");
     }
 
 
@@ -143,14 +143,14 @@
 
 
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        mvMatrix=mat4.create();
+        var mvMatrix=mat4.create();
         mvMatrix=mat4.multiply(mvMatrix,vMatrix,mMatrix);
         gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
         //gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
         //gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
 
         var normalMatrix = mat3.create();    
-        mat3.fromMat4(normalMatrix,vMatrix); 
+        mat3.fromMat4(normalMatrix,mvMatrix); 
         mat3.invert(normalMatrix,normalMatrix);
         mat3.transpose(normalMatrix,normalMatrix);
 /*
@@ -183,8 +183,24 @@
         if (teapotVertexPositionBuffer == null || teapotVertexNormalBuffer == null || teapotVertexTextureCoordBuffer == null || teapotVertexIndexBuffer == null) {
             return;
         }
-
+        //Setting the perspective and the view
         mat4.perspective(pMatrix,45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+        mat4.identity(vMatrix);
+        mat4.rotate(vMatrix, vMatrix,-Math.PI/4, [1, 0, 0]);
+        mat4.translate(vMatrix,vMatrix, [0, 50, -50]);
+
+        //Setting the camera position
+        var camera = vec4.create();
+        vec4.transformMat4(camera,camera,vMatrix);
+        gl.uniform4fv(shaderProgram.cameraPositionUniform,camera);
+
+
+        //Setting the light position
+        var lightPos = vec3.create();
+        var translateLight = mat4.create();
+        mat4.translate(translateLight,translateLight,[0 , 30 ,30.0]);
+        vec3.transformMat4(lightPos, lightPos, translateLight);
+        vec3.transformMat4(lightPos, lightPos, vMatrix);
 
         var specularHighlights = useSpecularLighting;
         gl.uniform1i(shaderProgram.showSpecularHighlightsUniform, specularHighlights);
@@ -192,18 +208,14 @@
         var lighting = useLighting;
         gl.uniform1i(shaderProgram.useLightingUniform, lighting);
         if (lighting) {
+            //Setting the position for the lightSource, 3fv = vector?
+            gl.uniform3fv(shaderProgram.pointLightingLocationUniform,lightPos);
+
             gl.uniform3f(
                 shaderProgram.ambientColorUniform,
                 parseFloat(ambientR),
                 parseFloat(ambientG),
                 parseFloat(ambientB)
-            );
-
-            gl.uniform3f(
-                shaderProgram.pointLightingLocationUniform,
-                parseFloat(lightPositionX),
-                parseFloat(lightPositionY),
-                parseFloat(lightPositionZ)
             );
 
             gl.uniform3f(
@@ -226,16 +238,12 @@
         var texture = "earth";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
 
-        mat4.identity(vMatrix);
-        mat4.rotate(vMatrix, vMatrix,-Math.PI/4, [1, 0, 0]);
-        mat4.translate(vMatrix,vMatrix, [0, 50, -50]);
-
-
-
         //console.log("xPos1 is   " + xPos1); 
         mat4.identity(mMatrix);
         mat4.translate(mMatrix,mMatrix, [xPos1, yPos1, 1]);
         mat4.rotate(mMatrix,mMatrix,Math.PI/2, [1, 0, 0]);
+
+
         
 
         gl.activeTexture(gl.TEXTURE0);
@@ -264,7 +272,7 @@
         /*==============SETTING TEXTURES AND DRAW SPHERE 2==============*/
         mat4.identity(mMatrix);
         mat4.translate(mMatrix,mMatrix, [xPos2, yPos2, 1]);
-        mat4.rotate(mMatrix,mMatrix,Math.PI/2, [1, 0, 0]);
+        mat4.rotate(mMatrix,mMatrix,Math.PI/2, [0, 1, 0]);
 
         
         texture = "galvanized";

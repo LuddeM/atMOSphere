@@ -36,6 +36,8 @@
         gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,0.8,0.8,0.8);
  
 
+      
+
         /*==============SET TEXTURES,POSITION AND DRAW ALL SPHERES==============*/
 
         drawSphere(vec3.fromValues(xPos1,yPos1,1),0,[0,0,0],"earth");
@@ -80,9 +82,6 @@
 
         setMatrixUniforms();
         gl.drawElements(gl.TRIANGLES, mapVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-
-        /*==============SETTING TEXTURES AND DRAW Map==============*/
-        
 
     }
 

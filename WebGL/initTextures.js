@@ -13,10 +13,8 @@ function handleLoadedTexture(texture) {
 
 var earthTexture;
 var galvanizedTexture;
-var skyboxTexture;
 
 function initTextures() {
-
     earthTexture = gl.createTexture();
     earthTexture.image = new Image();
     earthTexture.image.onload = function () {
@@ -24,21 +22,10 @@ function initTextures() {
     }
     earthTexture.image.src = "textures/earth.jpg";
 
-
     galvanizedTexture = gl.createTexture();
     galvanizedTexture.image = new Image();
     galvanizedTexture.image.onload = function () {
         handleLoadedTexture(galvanizedTexture)
     }
     galvanizedTexture.image.src = "textures/arroway.de_metal+structure+06_d100_flat.jpg";
-
-
-
-    skyboxTexture = gl.createTexture();
-    skyboxTexture.image = new Image();
-    galvanizedTexture.image.onload = function () {
-        handleLoadedTexture(skyBoxTexture)
-    }
-    galvanizedTexture.image.src = "textures/skybox_red.png";
-
 }

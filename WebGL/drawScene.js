@@ -7,7 +7,7 @@
             return;
         }
         //Setting the perspective and the view
-        mat4.perspective(pMatrix,45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+        mat4.perspective(pMatrix,45, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0, pMatrix);
         mat4.identity(vMatrix);
         mat4.rotate(vMatrix, vMatrix,-Math.PI/4, [1, 0, 0]);
         mat4.translate(vMatrix,vMatrix, [0, 50, -50]);
@@ -67,7 +67,7 @@
             gl.bindTexture(gl.TEXTURE_2D, galvanizedTexture);
         }
         */
-        gl.bindTexture(gl.TEXTURE_2D, skyboxTexture);
+        gl.bindTexture(gl.TEXTURE_2D, galvanizedTexture);
         gl.uniform1i(shaderProgram.samplerUniform, 0);
 
         gl.uniform1f(shaderProgram.materialShininessUniform, parseFloat(mapShine));
@@ -91,13 +91,14 @@
 
 
         mat4.identity(mMatrix);
-        //mat4.scale(mMatrix,mMatrix, [2, 2, 2]);
+        //mat4.rotate(mMatrix,mMatrix,Math.PI/2,[1,0,0]);
+        //mat4.rotate(mMatrix,mMatrix,Math.PI,[0,1,0]);
+        mat4.scale(mMatrix,mMatrix, [20, 20, 20]);
 
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
 
         gl.activeTexture(gl.TEXTURE0);
-        //gl.bindTexture(gl.TEXTURE_2D, skyboxTexture);
-        //gl.bindTexture(gl.TEXTURE_2D, galvanizedTexture);
+        gl.bindTexture(gl.TEXTURE_2D, skyboxTexture);
 
         gl.uniform1i(shaderProgram.samplerUniform, 0);
         gl.uniform1f(shaderProgram.materialShininessUniform, parseFloat(0));

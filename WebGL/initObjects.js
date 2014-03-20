@@ -3,7 +3,7 @@
 
   /*========================= Variabler ========================= */
 
-var sphereShine = 32.0, pillarShine = 32.0,mapShine=0.0;
+var sphereShine = 100.0, pillarShine = 32.0,mapShine=0.0;
 
 var mass1=1, mass2=1, mass3=1000, xPos1=5, yPos1=0,xPos2=-5, yPos2=0, radius1 = 1, radius2 = 1;
 
@@ -182,7 +182,7 @@ function loadSpheres() {
     }    
     function loadSkybox(){
         var request = new XMLHttpRequest();
-        request.open("GET", "jsonObjects/skyboxnormal1.json");
+        request.open("GET", "jsonObjects/skybox_bigger_flipped.json");
         request.onreadystatechange = function () {
             if (request.readyState == 4) {
                 handleLoadedSkybox(JSON.parse(request.responseText));

@@ -7,9 +7,10 @@
             return;
         }
         //Setting the perspective and the view
-        mat4.perspective(pMatrix,45, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0, pMatrix);
+        mat4.perspective(pMatrix,45, gl.viewportWidth / gl.viewportHeight, 0.1, 100000.0, pMatrix);
         mat4.identity(vMatrix);
         mat4.rotate(vMatrix, vMatrix,-Math.PI/4, [1, 0, 0]);
+    
         mat4.translate(vMatrix,vMatrix, [0, 50, -50]);
 
         //Setting the camera position
@@ -25,7 +26,6 @@
         vec3.transformMat4(lightPos, lightPos, translateLight);
         vec3.transformMat4(lightPos, lightPos, vMatrix);
 
-
         gl.uniform1i(shaderProgram.showSpecularHighlightsUniform, true);
         gl.uniform1i(shaderProgram.useLightingUniform, true);
 
@@ -33,15 +33,14 @@
         gl.uniform3fv(shaderProgram.pointLightingLocationUniform,lightPos);
         gl.uniform3f(shaderProgram.ambientColorUniform,0.2,0.2,0.2);
         gl.uniform3f(shaderProgram.pointLightingSpecularColorUniform,0.8,0.8,0.8);
-        gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,0.8,0.8,0.8);
- 
+        //gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,0.8,0.8,0.8);
+        gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,0.4,0.4,0.6);
 
-      
 
         /*==============SET TEXTURES,POSITION AND DRAW ALL SPHERES==============*/
 
-        drawSphere(vec3.fromValues(xPos1,yPos1,1),0,[0,0,0],"earth");
-        drawSphere(vec3.fromValues(xPos2,yPos2,1),0,[0,0,0],"galvanized");
+        drawSphere(vec3.fromValues(xPos1,yPos1,1),-Math.PI/3,[1,0,0],"earth");
+        drawSphere(vec3.fromValues(xPos2,yPos2,1),-Math.PI/3,[1,0,0],"galvanized");
 
         /*==============SET TEXTURES,POSITION AND DRAW ALL PILLARS==============*/
 
@@ -55,6 +54,7 @@
         
         mat4.identity(mMatrix);
         mat4.rotate(mMatrix, mMatrix,Math.PI/2, [1, 0, 0]);
+
 
         texture = "earth";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
@@ -89,11 +89,14 @@
 
         /*==============SETTING TEXTURES AND DRAW SKYBOX==============*/
 
+        gl.uniform3fv(shaderProgram.pointLightingLocationUniform,lightPos);
+        gl.uniform3f(shaderProgram.ambientColorUniform,0.2,0.2,0.2);
+        gl.uniform3f(shaderProgram.pointLightingSpecularColorUniform,0,0,0);
+        gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,0,0,0);
 
         mat4.identity(mMatrix);
-        //mat4.rotate(mMatrix,mMatrix,Math.PI/2,[1,0,0]);
-        //mat4.rotate(mMatrix,mMatrix,Math.PI,[0,1,0]);
-        mat4.scale(mMatrix,mMatrix, [20, 20, 20]);
+        mat4.rotate(mMatrix,mMatrix,Math.PI,[0,1,0]);
+        mat4.scale(mMatrix,mMatrix, [100, 100, 100]);
 
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
 

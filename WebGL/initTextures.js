@@ -45,5 +45,5 @@ function initTextures() {
     skyboxTexture.image.onload = function () {
         handleLoadedTexture(skyboxTexture)
     }
-    skyboxTexture.image.src = "textures/planet.png";
+    skyboxTexture.image.src = "textures/blue_space.jpg";
 }

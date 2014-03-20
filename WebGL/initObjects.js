@@ -139,10 +139,10 @@ function handleLoadedSphere(sphereData) {
         gl.bindBuffer(gl.ARRAY_BUFFER, skyboxVertexPositionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(skyboxData.verts), gl.STATIC_DRAW);
         skyboxVertexPositionBuffer.itemSize = 3;
-        skyboxVertexPositionBuffer.numItems = mapData.verts.length / 3;
+        skyboxVertexPositionBuffer.numItems = skyboxData.verts.length / 3;
 
-        mapVertexIndexBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mapVertexIndexBuffer);
+        skyboxVertexIndexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, skyboxVertexIndexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(skyboxData.indices), gl.STATIC_DRAW);
         skyboxVertexIndexBuffer.itemSize = 1;
         skyboxVertexIndexBuffer.numItems = skyboxData.indices.length;
@@ -182,10 +182,10 @@ function loadSpheres() {
     }    
     function loadSkybox(){
         var request = new XMLHttpRequest();
-        request.open("GET", "jsonObjects/skybox_seamless.json");
+        request.open("GET", "jsonObjects/skybox_seamless_normals.json");
         request.onreadystatechange = function () {
             if (request.readyState == 4) {
-                handleLoadedMap(JSON.parse(request.responseText));
+                handleLoadedSkybox(JSON.parse(request.responseText));
             }
         }
         request.send();

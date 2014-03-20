@@ -83,6 +83,34 @@
         setMatrixUniforms();
         gl.drawElements(gl.TRIANGLES, mapVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 
+
+        /*==============SETTING TEXTURES AND DRAW SKYBOX==============*/
+
+/*
+        mat4.identity(mMatrix);
+        mat4.scale(mMatrix,mMatrix, [2, 2, 2]);
+
+        gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
+
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, skyboxTexture);
+
+        gl.uniform1i(shaderProgram.samplerUniform, 0);
+        gl.uniform1f(shaderProgram.materialShininessUniform, parseFloat(0));
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, skyboxVertexPositionBuffer);
+        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, skyboxVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, skyboxVertexTextureCoordBuffer);
+        gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, skyboxVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+        
+        gl.bindBuffer(gl.ARRAY_BUFFER, skyboxVertexNormalBuffer);
+        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, skyboxVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, skyboxVertexIndexBuffer);
+
+        setMatrixUniforms();
+        gl.drawElements(gl.TRIANGLES, skyboxVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);*/
     }
 
     function drawSphere(translation,rotation,axis,texture){

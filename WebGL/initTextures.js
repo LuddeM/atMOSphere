@@ -1,6 +1,15 @@
 
 
-
+/*
+    function handleLoadedTexture(texture) {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+*/
 function handleLoadedTexture(texture) {
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -13,6 +22,7 @@ function handleLoadedTexture(texture) {
 
 var earthTexture;
 var galvanizedTexture;
+var skyboxTexture;
 
 function initTextures() {
     earthTexture = gl.createTexture();
@@ -28,4 +38,12 @@ function initTextures() {
         handleLoadedTexture(galvanizedTexture)
     }
     galvanizedTexture.image.src = "textures/arroway.de_metal+structure+06_d100_flat.jpg";
+
+
+    skyboxTexture = gl.createTexture();
+    skyboxTexture.image = new Image();
+    skyboxTexture.image.onload = function () {
+        handleLoadedTexture(skyboxTexture)
+    }
+    galvanizedTexture.image.src = "textures/skybox_red.jpg";    
 }

@@ -45,10 +45,10 @@
 
         /*==============SET TEXTURES,POSITION AND DRAW ALL PILLARS==============*/
 
-        drawPillar(vec3.fromValues(xPosCy1,yPosCy1,0),Math.PI/2,[1,0,0],"none");
-        drawPillar(vec3.fromValues(xPosCy2,yPosCy2,0),Math.PI/2,[1,0,0],"none");
-        drawPillar(vec3.fromValues(xPosCy3,yPosCy3,0),Math.PI/2,[1,0,0],"none");
-        drawPillar(vec3.fromValues(xPosCy4,yPosCy4,0),Math.PI/2,[1,0,0],"none");
+        drawPillar(vec3.fromValues(xPosCy1,yPosCy1,0),Math.PI/2,[1,0,0],"earth");
+        drawPillar(vec3.fromValues(xPosCy2,yPosCy2,0),Math.PI/2,[1,0,0],"earth");
+        drawPillar(vec3.fromValues(xPosCy3,yPosCy3,0),Math.PI/2,[1,0,0],"earth");
+        drawPillar(vec3.fromValues(xPosCy4,yPosCy4,0),Math.PI/2,[1,0,0],"earth");
         
 
         /*==============SETTING TEXTURES AND DRAW Map==============*/
@@ -56,15 +56,18 @@
         mat4.identity(mMatrix);
         mat4.rotate(mMatrix, mMatrix,Math.PI/2, [1, 0, 0]);
 
-        texture = "none";
+        texture = "earth";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
 
         gl.activeTexture(gl.TEXTURE0);
+        /*
         if (texture == "earth") {
             gl.bindTexture(gl.TEXTURE_2D, earthTexture);
         } else if (texture == "galvanized") {
             gl.bindTexture(gl.TEXTURE_2D, galvanizedTexture);
         }
+        */
+        gl.bindTexture(gl.TEXTURE_2D, skyboxTexture);
         gl.uniform1i(shaderProgram.samplerUniform, 0);
 
         gl.uniform1f(shaderProgram.materialShininessUniform, parseFloat(mapShine));
@@ -86,14 +89,15 @@
 
         /*==============SETTING TEXTURES AND DRAW SKYBOX==============*/
 
-/*
+
         mat4.identity(mMatrix);
-        mat4.scale(mMatrix,mMatrix, [2, 2, 2]);
+        //mat4.scale(mMatrix,mMatrix, [2, 2, 2]);
 
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
 
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, skyboxTexture);
+        //gl.bindTexture(gl.TEXTURE_2D, skyboxTexture);
+        //gl.bindTexture(gl.TEXTURE_2D, galvanizedTexture);
 
         gl.uniform1i(shaderProgram.samplerUniform, 0);
         gl.uniform1f(shaderProgram.materialShininessUniform, parseFloat(0));
@@ -110,7 +114,7 @@
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, skyboxVertexIndexBuffer);
 
         setMatrixUniforms();
-        gl.drawElements(gl.TRIANGLES, skyboxVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);*/
+        gl.drawElements(gl.TRIANGLES, skyboxVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
     }
 
     function drawSphere(translation,rotation,axis,texture){
@@ -153,7 +157,6 @@
         mat4.translate(mMatrix, mMatrix, translation);
         mat4.rotate(mMatrix,mMatrix,rotation, axis);
 
-        texture = "none";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
 
         gl.activeTexture(gl.TEXTURE0);

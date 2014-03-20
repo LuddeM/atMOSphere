@@ -45,5 +45,5 @@ function initTextures() {
     skyboxTexture.image.onload = function () {
         handleLoadedTexture(skyboxTexture)
     }
-    galvanizedTexture.image.src = "textures/skybox_red.jpg";    
+    galvanizedTexture.image.src = "textures/skybox_red.png";
 }

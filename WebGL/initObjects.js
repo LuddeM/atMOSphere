@@ -182,7 +182,7 @@ function loadSpheres() {
     }    
     function loadSkybox(){
         var request = new XMLHttpRequest();
-        request.open("GET", "jsonObjects/skybox_seamless_normals.json");
+        request.open("GET", "jsonObjects/skybox_red_laptop.json");
         request.onreadystatechange = function () {
             if (request.readyState == 4) {
                 handleLoadedSkybox(JSON.parse(request.responseText));

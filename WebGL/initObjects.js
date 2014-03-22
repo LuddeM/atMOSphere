@@ -147,7 +147,37 @@ function handleLoadedSphere(sphereData) {
         skyboxVertexIndexBuffer.itemSize = 1;
         skyboxVertexIndexBuffer.numItems = skyboxData.indices.length;
     }    
+    var iceVertexPositionBuffer;
+    var iceVertexNormalBuffer;
+    var iceVertexTextureCoordBuffer;
+    var iceVertexIndexBuffer;
 
+    function handleLoadedIce(iceData) {
+        
+        iceVertexNormalBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, iceVertexNormalBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(iceData.normals), gl.STATIC_DRAW);
+        iceVertexNormalBuffer.itemSize = 3;
+        iceVertexNormalBuffer.numItems = iceData.normals.length / 3;
+
+        iceVertexTextureCoordBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, iceVertexTextureCoordBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(iceData.texcoords), gl.STATIC_DRAW);
+        iceVertexTextureCoordBuffer.itemSize = 2;
+        iceVertexTextureCoordBuffer.numItems = iceData.texcoords.length / 2;
+
+        iceVertexPositionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, iceVertexPositionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(iceData.verts), gl.STATIC_DRAW);
+        iceVertexPositionBuffer.itemSize = 3;
+        iceVertexPositionBuffer.numItems = iceData.verts.length / 3;
+
+        iceVertexIndexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iceVertexIndexBuffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(iceData.indices), gl.STATIC_DRAW);
+        iceVertexIndexBuffer.itemSize = 1;
+        iceVertexIndexBuffer.numItems = iceData.indices.length;
+    }    
 
 function loadSpheres() {
         var request = new XMLHttpRequest();
@@ -189,5 +219,16 @@ function loadSpheres() {
             }
         }
         request.send();
+    }
+
+    function loadIce(){
+        var request = new XMLHttpRequest();
+        request.open("GET", "jsonObjects/ice.json");
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                handleLoadedIce(JSON.parse(request.responseText));
+            }
+        }
+        request.send();        
     }    
 

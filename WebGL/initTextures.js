@@ -23,6 +23,8 @@ function handleLoadedTexture(texture) {
 var earthTexture;
 var galvanizedTexture;
 var skyboxTexture;
+var pillarTexture;
+var iceTexture;
 
 function initTextures() {
     earthTexture = gl.createTexture();
@@ -46,4 +48,20 @@ function initTextures() {
         handleLoadedTexture(skyboxTexture)
     }
     skyboxTexture.image.src = "textures/blue_space.jpg";
+
+
+    pillarTexture = gl.createTexture();
+    pillarTexture.image = new Image();
+    pillarTexture.image.onload = function () {
+        handleLoadedTexture(pillarTexture)
+    }
+    pillarTexture.image.src = "textures/pillar.png";
+
+/*
+    iceTexture = gl.createTexture();
+    iceTexture.image = new Image();
+    pillarTexture.image.onload = function () {
+        handleLoadedTexture(iceTexture)
+    }
+    iceTexture.image.src = "textures/pillar.png";*/          
 }

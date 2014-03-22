@@ -33,8 +33,7 @@
         gl.uniform3fv(shaderProgram.pointLightingLocationUniform,lightPos);
         gl.uniform3f(shaderProgram.ambientColorUniform,0.2,0.2,0.2);
         gl.uniform3f(shaderProgram.pointLightingSpecularColorUniform,0.8,0.8,0.8);
-        //gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,0.8,0.8,0.8);
-        gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,0.4,0.4,0.6);
+        gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,0.8,0.8,0.8);
 
 
         /*==============SET TEXTURES,POSITION AND DRAW ALL SPHERES==============*/
@@ -43,11 +42,11 @@
         drawSphere(vec3.fromValues(xPos2,yPos2,1),-Math.PI/3,[1,0,0],"galvanized");
 
         /*==============SET TEXTURES,POSITION AND DRAW ALL PILLARS==============*/
-
-        drawPillar(vec3.fromValues(xPosCy1,yPosCy1,0),Math.PI/2,[1,0,0],"earth");
-        drawPillar(vec3.fromValues(xPosCy2,yPosCy2,0),Math.PI/2,[1,0,0],"earth");
-        drawPillar(vec3.fromValues(xPosCy3,yPosCy3,0),Math.PI/2,[1,0,0],"earth");
-        drawPillar(vec3.fromValues(xPosCy4,yPosCy4,0),Math.PI/2,[1,0,0],"earth");
+        //drawPillar([0,0,0],-3*Math.PI/4,[0,1,0],"earth");
+        drawPillar(vec3.fromValues(xPosCy1,yPosCy1,0),-3*Math.PI/4,[0,1,0],"earth");
+        drawPillar(vec3.fromValues(xPosCy2,yPosCy2,0),-3*Math.PI/4,[0,1,0],"earth");
+        drawPillar(vec3.fromValues(xPosCy3,yPosCy3,0),3*Math.PI/4,[0,1,0],"earth");
+        drawPillar(vec3.fromValues(xPosCy4,yPosCy4,0),3*Math.PI/4,[0,1,0],"earth");
         
 
         /*==============SETTING TEXTURES AND DRAW Map==============*/
@@ -90,7 +89,7 @@
         /*==============SETTING TEXTURES AND DRAW SKYBOX==============*/
 
         gl.uniform3fv(shaderProgram.pointLightingLocationUniform,lightPos);
-        gl.uniform3f(shaderProgram.ambientColorUniform,0.2,0.2,0.2);
+        gl.uniform3f(shaderProgram.ambientColorUniform,0.3,0.3,0.3);
         gl.uniform3f(shaderProgram.pointLightingSpecularColorUniform,0,0,0);
         gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform,0,0,0);
 
@@ -159,16 +158,13 @@
 
         mat4.identity(mMatrix);
         mat4.translate(mMatrix, mMatrix, translation);
+        mat4.rotate(mMatrix,mMatrix,Math.PI/2, [1,0,0]);        
         mat4.rotate(mMatrix,mMatrix,rotation, axis);
 
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
 
         gl.activeTexture(gl.TEXTURE0);
-        if (texture == "earth") {
-            gl.bindTexture(gl.TEXTURE_2D, earthTexture);
-        } else if (texture == "galvanized") {
-            gl.bindTexture(gl.TEXTURE_2D, galvanizedTexture);
-        }
+        gl.bindTexture(gl.TEXTURE_2D, pillarTexture);
         gl.uniform1i(shaderProgram.samplerUniform, 0);
 
         gl.uniform1f(shaderProgram.materialShininessUniform, parseFloat(pillarShine));

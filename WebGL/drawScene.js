@@ -85,6 +85,41 @@
         setMatrixUniforms();
         gl.drawElements(gl.TRIANGLES, mapVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 
+                /*==============SETTING TEXTURES AND DRAW ICE==============*/
+        
+        mat4.identity(mMatrix);
+        mat4.rotate(mMatrix, mMatrix,-Math.PI/2, [1, 0, 0]);
+
+
+        texture = "none";
+        gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
+
+        gl.activeTexture(gl.TEXTURE0);
+        
+        if (texture == "earth") {
+            gl.bindTexture(gl.TEXTURE_2D, earthTexture);
+        } else if (texture == "galvanized") {
+            gl.bindTexture(gl.TEXTURE_2D, galvanizedTexture);
+        }
+        
+        gl.uniform1i(shaderProgram.samplerUniform, 0);
+
+        gl.uniform1f(shaderProgram.materialShininessUniform, 100);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, iceVertexPositionBuffer);
+        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, iceVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, iceVertexTextureCoordBuffer);
+        gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, iceVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+        
+        gl.bindBuffer(gl.ARRAY_BUFFER, iceVertexNormalBuffer);
+        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, iceVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iceVertexIndexBuffer);
+
+        setMatrixUniforms();
+        gl.drawElements(gl.TRIANGLES, iceVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+
 
         /*==============SETTING TEXTURES AND DRAW SKYBOX==============*/
 
@@ -96,7 +131,7 @@
         mat4.identity(mMatrix);
         mat4.rotate(mMatrix,mMatrix,Math.PI,[0,1,0]);
         mat4.scale(mMatrix,mMatrix, [100, 100, 100]);
-
+        texture = "hej";
         gl.uniform1i(shaderProgram.useTexturesUniform, texture != "none");
 
         gl.activeTexture(gl.TEXTURE0);

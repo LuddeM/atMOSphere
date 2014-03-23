@@ -63,5 +63,5 @@ function initTextures() {
     pillarTexture.image.onload = function () {
         handleLoadedTexture(iceTexture)
     }
-    iceTexture.image.src = "textures/pillar.png";*/          
+    iceTexture.image.src = "textures/pillar.png";   */      
 }

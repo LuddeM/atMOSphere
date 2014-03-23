@@ -223,7 +223,7 @@ function loadSpheres() {
 
     function loadIce(){
         var request = new XMLHttpRequest();
-        request.open("GET", "jsonObjects/ice.json");
+        request.open("GET", "jsonObjects/ice10.json");
         request.onreadystatechange = function () {
             if (request.readyState == 4) {
                 handleLoadedIce(JSON.parse(request.responseText));
